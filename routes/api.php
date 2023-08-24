@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminSessionController;
 use App\Http\Controllers\UserRegisterController;
 use App\Http\Controllers\UserSessionController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,14 +23,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['admin'],function (){
-    Route::post('admin/login',[AdminSessionController::class,'login']);
-    Route::post('admin/logout',[AdminSessionController::class,'logout'])
-        ->middleware(['auth:sanctum','ability:admin']);
+Route::group(['admin'], function () {
+    Route::post('admin/login', [AdminSessionController::class, 'login']);
+    Route::post('admin/logout', [AdminSessionController::class, 'logout'])
+        ->middleware(['auth:sanctum', 'ability:admin']);
 });
 
-Route::group(['user'],function (){
-    Route::post('register',[UserRegisterController::class,'store']);
-    Route::post('login',[UserSessionController::class,'login']);
-    Route::post('logout',[UserSessionController::class,'logout'])->middleware(['auth:sanctum','ability:user']);
+Route::group(['user'], function () {
+    Route::post('register', [UserRegisterController::class, 'store']);
+    Route::post('login', [UserSessionController::class, 'login']);
+    Route::post('logout', [UserSessionController::class, 'logout'])->middleware(['auth:sanctum', 'ability:user']);
 });
+
+Route::group(['user_email_verification'],function (){
+    Route::get('email/verify/{id}', [VerificationController::class,'verify'])
+        ->name('verification.verify');
+
+    Route::get('email/resend', [VerificationController::class,'resend'])
+        ->name('verification.resend');
+});
+
