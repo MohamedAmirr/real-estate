@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRegisterRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UserRegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,17 @@ class UserRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'email' => ['required',Rule::unique('users','email'),'email', 'max:255'],
+            'password' => ['required','min:7','max:255'],
+            'name'=>['required','max:255']
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'email' => 'Email is not valid!',
+            'password' => 'Password is not valid!',
+            'name'=>'Name is not valid!'
         ];
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminSessionController;
+use App\Http\Controllers\UserRegisterController;
+use App\Http\Controllers\UserSessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +26,8 @@ Route::group(['admin'],function (){
     Route::post('admin/login',[AdminSessionController::class,'login']);
     Route::post('admin/logout',[AdminSessionController::class,'logout'])
         ->middleware(['auth:sanctum','ability:admin']);
+});
+
+Route::group(['user'],function (){
+    Route::post('register',[UserRegisterController::class,'store']);
 });

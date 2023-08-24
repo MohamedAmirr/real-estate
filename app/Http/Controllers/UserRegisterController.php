@@ -6,7 +6,7 @@ use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserRegister extends Controller
+class UserRegisterController extends Controller
 {
     public function store(UserRegisterRequest $request)
     {
