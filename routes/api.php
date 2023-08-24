@@ -30,4 +30,6 @@ Route::group(['admin'],function (){
 
 Route::group(['user'],function (){
     Route::post('register',[UserRegisterController::class,'store']);
+    Route::post('login',[UserSessionController::class,'login']);
+    Route::post('logout',[UserSessionController::class,'logout'])->middleware(['auth:sanctum','ability:user']);
 });
