@@ -55,6 +55,8 @@ Route::group(['unit'],function (){
 
     Route::get('unit/{unit}',[UnitController::class,'read'])
         ->middleware(['auth:sanctum', 'ability:user,admin']);
+    Route::post('unit/buy/{unit}',[UnitController::class,'buy'])
+        ->middleware(['auth:sanctum', 'ability:user']);;
 });
 
 Route::middleware(['auth:sanctum','ability:admin'])->group(function (){

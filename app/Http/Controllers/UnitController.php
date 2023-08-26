@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UnitRequest;
 use App\Models\Image;
+use App\Models\Transaction;
 use App\Models\Unit;
+use App\Models\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UnitController extends Controller
 {
@@ -65,5 +68,28 @@ class UnitController extends Controller
         ], 200);
     }
 
+    private function getUserFromToken()
+    {
+        $token = PersonalAccessToken::findToken(request()->bearerToken());
+        return $token->tokenable;
+    }
 
+    private function createNewTransaction(Unit $unit, User $user)
+    {
+        $transaction = new Transaction();
+        $transaction->user_id = $user->id;
+        $transaction->unit_id = $unit->id;
+        $transaction->save();
+        return $transaction;
+    }
+
+    public function buy(Unit $unit)
+    {
+        $user = $this->getUserFromToken();
+        $transaction = $this->createNewTransaction($unit, $user);
+        return response()->json([
+            'message' => 'Success',
+            'body' => $transaction
+        ], 200);
+    }
 }
