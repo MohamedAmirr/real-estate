@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminSessionController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRegisterController;
 use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\VerificationController;
@@ -52,3 +53,6 @@ Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
     Route::put('unit/{unit}',[UnitController::class,'update']);
 })->name('unit');
 
+Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
+    Route::get('users',[UserController::class,'show']);
+});
