@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminSessionController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRegisterController;
 use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\VerificationController;
@@ -32,7 +33,8 @@ Route::group(['admin'], function () {
 Route::group(['user'], function () {
     Route::post('register', [UserRegisterController::class, 'store']);
     Route::post('login', [UserSessionController::class, 'login']);
-    Route::post('logout', [UserSessionController::class, 'logout'])->middleware(['auth:sanctum', 'ability:user']);
+    Route::post('logout', [UserSessionController::class, 'logout'])
+        ->middleware(['auth:sanctum', 'ability:user']);
 });
 
 Route::group(['user_email_verification'],function (){
@@ -42,4 +44,11 @@ Route::group(['user_email_verification'],function (){
     Route::get('email/resend', [VerificationController::class,'resend'])
         ->name('verification.resend');
 });
+
+Route::group(['unit'],function (){
+    Route::post('unit/store',[UnitController::class,'store']);
+    Route::get('unit/{unit}',[UnitController::class,'read']);
+    Route::delete('unit/{unit}',[UnitController::class,'delete']);
+    Route::put('unit/{unit}',[UnitController::class,'update']);
+})->middleware(['auth:sanctum','admin']);
 
