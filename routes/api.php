@@ -46,12 +46,16 @@ Route::group(['user_email_verification'],function (){
         ->name('verification.resend');
 });
 
-Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
-    Route::post('unit/store',[UnitController::class,'store']);
-    Route::get('unit/{unit}',[UnitController::class,'read']);
-    Route::delete('unit/{unit}',[UnitController::class,'delete']);
-    Route::put('unit/{unit}',[UnitController::class,'update']);
-})->name('unit');
+Route::group(['unit'],function (){
+    Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
+        Route::post('unit/store',[UnitController::class,'store']);
+        Route::delete('unit/{unit}',[UnitController::class,'delete']);
+        Route::put('unit/{unit}',[UnitController::class,'update']);
+    });
+
+    Route::get('unit/{unit}',[UnitController::class,'read'])
+        ->middleware(['auth:sanctum', 'ability:user,admin']);
+});
 
 Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
     Route::get('users',[UserController::class,'show']);
