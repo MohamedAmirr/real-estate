@@ -13,5 +13,10 @@ class UserController extends Controller
             'body'=>User::all()
         ],200);
     }
-
+    public function destroy(User $user){
+        $user->delete();
+        return response()->json([
+            'message'=>'User has been deleted successfully'
+        ],200);
+    }
 }

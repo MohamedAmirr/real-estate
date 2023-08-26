@@ -32,7 +32,7 @@ Route::group(['admin'], function () {
 });
 
 Route::group(['user'], function () {
-    Route::post('register', [UserRegisterController::class, 'store']);
+    Route::post('register'  , [UserRegisterController::class, 'store']);
     Route::post('login', [UserSessionController::class, 'login']);
     Route::post('logout', [UserSessionController::class, 'logout'])
         ->middleware(['auth:sanctum', 'ability:user']);
@@ -55,4 +55,5 @@ Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
 
 Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
     Route::get('users',[UserController::class,'show']);
+    Route::delete('user/{user}',[UserController::class,'destroy']);
 });
