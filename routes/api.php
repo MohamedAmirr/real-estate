@@ -58,18 +58,3 @@ Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
     Route::get('users',[UserController::class,'show']);
     Route::delete('user/{user}',[UserController::class,'destroy']);
 });
-
-Route::prefix('user')->group(function () {
-    Route::post('register', [UserRegisterController::class, 'store']);
-    Route::post('login', [UserSessionController::class, 'login']);
-    Route::post('logout', [UserSessionController::class, 'logout'])->middleware(['auth:sanctum', 'ability:user']);
-});
-
-Route::prefix('email')->group(function () {
-    Route::get('verify/{id}', [VerificationController::class, 'verify'])
-        ->name('verification.verify');
-
-    Route::get('resend', [VerificationController::class, 'resend'])
-        ->name('verification.resend');
-});
-
