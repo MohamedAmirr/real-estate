@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UnitStoreRequest;
 use App\Http\Requests\UnitUpdateRequest;
+use App\Http\Resources\TransactionResource;
 use App\Http\Resources\UnitResource;
 use App\Models\Image;
 use App\Models\Transaction;
@@ -100,7 +101,7 @@ class UnitController extends Controller
         return Transaction::create([
             'user_id'=>$user->id,
             'unit_id'=>$unit->id,
-        ])->id;
+        ]);
     }
 
     public function buy(Unit $unit)
@@ -115,7 +116,7 @@ class UnitController extends Controller
         $transaction = $this->createNewTransaction($unit, $user);
         return response()->json([
             'message' => 'Success',
-            'body' => $transaction
+            'body' => new TransactionResource($transaction)
         ], 200);
     }
 }
