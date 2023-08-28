@@ -55,9 +55,11 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-        'my_files' => [
-            'driver' => 'local',
-            'root'   => public_path() . '/'
+        'upload'=>[
+            'driver'=>'local',
+            'root'=>public_path('images/resource'),
+            'url'=>env('APP_URL').'/images/resource',
+            'visibility'=>'public'
         ]
 
     ],

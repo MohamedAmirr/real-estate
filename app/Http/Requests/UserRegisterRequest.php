@@ -23,17 +23,9 @@ class UserRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required',Rule::unique('users','email'),'email', 'max:255'],
-            'password' => ['required','min:7','max:255'],
-            'name'=>['required','max:255']
-        ];
-    }
-    public function messages()
-    {
-        return [
-            'email' => 'Email is not valid!',
-            'password' => 'Password is not valid!',
-            'name'=>'Name is not valid!'
+            'email' => ['required', Rule::unique('users', 'email'), 'email', 'max:255'],
+            'password' => ['required', 'min:7', 'max:255'],
+            'name' => ['required', 'max:255']
         ];
     }
 }

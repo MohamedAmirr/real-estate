@@ -21,16 +21,9 @@ class UserLoginRequest extends FormRequest
      */
     public function rules(): array
     {
-            return [
-                'email' => ['required','email', 'max:255'],
-                'password' => ['required','max:255']
-            ];
-    }
-    public function messages(): array
-    {
         return [
-            'email' => 'Email is not valid!',
-            'password' => 'Entered password form is not valid!'
+            'email' => ['required', 'email', 'max:255'],
+            'password' => ['required', 'max:255']
         ];
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\AdminSessionController;
+use App\Http\Controllers\AdminAuth\AdminSessionController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserAuth\UserRegisterController;
+use App\Http\Controllers\UserAuth\UserSessionController;
+use App\Http\Controllers\UserAuth\VerificationController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserRegisterController;
-use App\Http\Controllers\UserSessionController;
-use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
