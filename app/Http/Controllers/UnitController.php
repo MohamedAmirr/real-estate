@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-
 class UnitController extends Controller
 {
     private function saveImages($images, Unit $unit)
