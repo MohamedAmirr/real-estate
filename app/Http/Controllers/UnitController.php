@@ -97,11 +97,10 @@ class UnitController extends Controller
 
     private function createNewTransaction(Unit $unit, User $user)
     {
-        $transaction = new Transaction();
-        $transaction->user_id = $user->id;
-        $transaction->unit_id = $unit->id;
-        $transaction->save();
-        return $transaction;
+        return Transaction::create([
+            'user_id'=>$user->id,
+            'unit_id'=>$unit->id,
+        ])->id;
     }
 
     public function buy(Unit $unit)
