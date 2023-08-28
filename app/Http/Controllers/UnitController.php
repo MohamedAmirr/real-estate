@@ -12,15 +12,17 @@ use Illuminate\Http\Request;
 
 class UnitController extends Controller
 {
-    public function saveImages($images, Unit $unit)
+    private function saveImages($images, Unit $unit)
     {
+        $imagesData = [];
         foreach ($images as $imageFile) {
-            $image = new Image;
-            $path = $imageFile->store('', ['disk' => 'upload']);
-            $image->path = $path;
-            $image->unit_id = $unit->id;
-            $image->save();
+            $data = [
+                'path' => $imageFile->store('', ['disk' => 'upload']),
+                'unit_id' => $unit->id,
+            ];
+            $imagesData[] = $data;
         }
+        Image::insert($imagesData);
     }
 
     public function store(UnitStoreRequest $request)
