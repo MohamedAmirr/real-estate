@@ -66,10 +66,4 @@ Route::prefix('user')->group(function () {
 });
 
 
-Route::prefix('unit')->middleware(['auth:sanctum','ability:admin'])->group(function (){
-    Route::post('store',[UnitController::class,'store']);
-    Route::get('{unit}',[UnitController::class,'show']);
-    Route::delete('{unit}',[UnitController::class,'delete']);
-    Route::put('{unit}',[UnitController::class,'update']);
-});
 

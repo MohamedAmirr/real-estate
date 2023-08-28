@@ -13,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
+    protected $dates = ['deleted_at'];
 
         /**
          * The attributes that are mass assignable.
