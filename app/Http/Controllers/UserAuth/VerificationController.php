@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\UserAuth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class VerificationController extends Controller
 {

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UnitRequest;
+use App\Http\Requests\UnitStoreRequest;
+use App\Http\Requests\UnitUpdateRequest;
+use App\Http\Resources\UnitResource;
 use App\Models\Image;
 use App\Models\Unit;
 use http\Env\Response;
@@ -10,19 +12,25 @@ use Illuminate\Http\Request;
 
 class UnitController extends Controller
 {
-    public function store(UnitRequest $request)
+    public function saveImages($images, Unit $unit)
+    {
+        foreach ($images as $imageFile) {
+            $image = new Image;
+            $path = $imageFile->store('', ['disk' => 'upload']);
+            $image->path = $path;
+            $image->unit_id = $unit->id;
+            $image->save();
+        }
+    }
+
+    public function store(UnitStoreRequest $request)
     {
         $unit = Unit::create($request->validated());
 
         $images = $request->file('images');
-        if ($images)
-            foreach ($images as $imageFile) {
-                $image = new Image;
-                $path = $imageFile->store('/images/resource', ['disk' => 'my_files']);
-                $image->src = $path;
-                $image->unit_id = $unit->id;
-                $image->save();
-            }
+        if ($images) {
+            $this->saveImages($images, $unit);
+        }
 
         return response()->json([
             'message' => 'Unit created successfully',
@@ -30,30 +38,26 @@ class UnitController extends Controller
         ], 201);
     }
 
-    public function update(UnitRequest $request, Unit $unit)
+    public function update(UnitUpdateRequest $request, Unit $unit)
     {
         $unit->update($request->validated());
 
         $images = $request->file('images');
-        if ($images)
-            foreach ($images as $imageFile) {
-                $image = new Image;
-                $path = $imageFile->store('/images/resource', ['disk' => 'my_files']);
-                $image->src = $path;
-                $image->unit_id = $unit->id;
-                $image->save();
-            }
+
+        if ($images) {
+            $this->saveImages($images, $unit);
+        }
 
         return response()->json([
             'message' => 'Unit updated successfully',
-            'unit' => $unit
+            'unit' => new UnitResource($unit)
         ], 200);
     }
 
-    public function read(Unit $unit)
+    public function show(Unit $unit)
     {
         return response()->json([
-            $unit
+            'unit' => new UnitResource($unit),
         ], 200);
     }
 
