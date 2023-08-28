@@ -114,6 +114,7 @@ class UnitController extends Controller
 
         $user = $this->getUserFromToken();
         $transaction = $this->createNewTransaction($unit, $user);
+
         return response()->json([
             'message' => 'Success',
             'body' => new TransactionResource($transaction)

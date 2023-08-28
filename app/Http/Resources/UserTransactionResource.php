@@ -2,17 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Unit;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TransactionResource extends JsonResource
+class UserTransactionResource extends JsonResource
 {
-    private function getUnits($id)
-    {
-        return (Unit::where('id', $id)->get());
-    }
-
     /**
      * Transform the resource into an array.
      *
@@ -21,8 +16,9 @@ class TransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'TransactionID' => $this->id,
-            'UnitDetails' => UnitResource::collection($this->getUnits($this->unit_id)),
+            'user_id'=>$this->id,
+            'name'=>$this->name,
+            'units'=>TransactionResource::collection($this->transactions)
         ];
     }
 }
