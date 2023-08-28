@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UnitStoreRequest;
 use App\Http\Requests\UnitUpdateRequest;
+use App\Http\Resources\FilterUnitCollection;
+use App\Http\Resources\FilterUnitResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\UnitResource;
 use App\Models\Image;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 use Throwable;
@@ -74,6 +77,18 @@ class UnitController extends Controller
         ], 200);
     }
 
+    public function filter(Request $request)
+    {
+        return response()->json([
+            'message' => 'success',
+            'body' => new FilterUnitCollection(
+                Unit::latest()->filter(
+                    request(['type', 'location', 'number_of_rooms', 'number_of_bathrooms', 'area'])
+                )->paginate()
+            )
+        ], 200);
+    }
+
     public function show(Unit $unit)
     {
         return response()->json([
@@ -99,14 +114,14 @@ class UnitController extends Controller
     private function createNewTransaction(Unit $unit, User $user)
     {
         return Transaction::create([
-            'user_id'=>$user->id,
-            'unit_id'=>$unit->id,
+            'user_id' => $user->id,
+            'unit_id' => $unit->id,
         ]);
     }
 
     public function buy(Unit $unit)
     {
-        if($unit->is_sold) {
+        if ($unit->is_sold) {
             return response()->json([
                 'message' => 'Unit is sold out'
             ], 403);

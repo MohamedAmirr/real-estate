@@ -44,6 +44,9 @@ Route::prefix('admin')->group(function () {
 
     Route::get('purchases/{user}', [UserController::class, 'listPurchases'])
         ->middleware(['auth:sanctum', 'ability:admin']);
+
+    Route::get('units', [UnitController::class, 'filter'])
+        ->middleware(['auth:sanctum', 'ability:admin']);
 });
 
 
