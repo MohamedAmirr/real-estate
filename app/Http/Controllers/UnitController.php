@@ -2,30 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UnitRequest;
+use App\Http\Requests\UnitStoreRequest;
+use App\Http\Requests\UnitUpdateRequest;
+use App\Http\Resources\UnitResource;
 use App\Models\Image;
-use App\Models\Transaction;
 use App\Models\Unit;
-use App\Models\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
 
 class UnitController extends Controller
 {
+    private function saveImages($images, Unit $unit)
+    {
+        $imagesData = [];
+        foreach ($images as $imageFile) {
+            $data = [
+                'path' => $imageFile->store('', ['disk' => 'upload']),
+                'unit_id' => $unit->id,
+            ];
+            $imagesData[] = $data;
+        }
+        Image::insert($imagesData);
+    }
+
     public function store(UnitRequest $request)
     {
-        $unit = Unit::create($request->validated());
+        try {
+            DB::beginTransaction();
+            $unit = Unit::create($request->validated());
 
-        $images = $request->file('images');
-        if ($images)
-            foreach ($images as $imageFile) {
-                $image = new Image;
-                $path = $imageFile->store('/images/resource', ['disk' => 'my_files']);
-                $image->src = $path;
-                $image->unit_id = $unit->id;
-                $image->save();
+            $images = $request->file('images');
+            if ($images) {
+                $this->saveImages($images, $unit);
             }
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollback();
+        }
 
         return response()->json([
             'message' => 'Unit created successfully',
@@ -35,28 +51,30 @@ class UnitController extends Controller
 
     public function update(UnitRequest $request, Unit $unit)
     {
-        $unit->update($request->validated());
+        try {
+            DB::beginTransaction();
+            $unit->update($request->validated());
 
-        $images = $request->file('images');
-        if ($images)
-            foreach ($images as $imageFile) {
-                $image = new Image;
-                $path = $imageFile->store('/images/resource', ['disk' => 'my_files']);
-                $image->src = $path;
-                $image->unit_id = $unit->id;
-                $image->save();
+            $images = $request->file('images');
+
+            if ($images) {
+                $this->saveImages($images, $unit);
             }
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollback();
+        }
 
         return response()->json([
             'message' => 'Unit updated successfully',
-            'unit' => $unit
+            'unit' => new UnitResource($unit)
         ], 200);
     }
 
-    public function read(Unit $unit)
+    public function show(Unit $unit)
     {
         return response()->json([
-            $unit
+            'unit' => new UnitResource($unit),
         ], 200);
     }
 

@@ -25,37 +25,37 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['admin'], function () {
-    Route::post('admin/login', [AdminSessionController::class, 'login']);
-    Route::post('admin/logout', [AdminSessionController::class, 'logout'])
+Route::prefix('admin')->group(function () {
+    Route::post('login', [AdminSessionController::class, 'login']);
+    Route::post('logout', [AdminSessionController::class, 'logout'])
         ->middleware(['auth:sanctum', 'ability:admin']);
 });
 
-Route::group(['user'], function () {
-    Route::post('register'  , [UserRegisterController::class, 'store']);
+Route::prefix('user')->group(function () {
+    Route::post('register', [UserRegisterController::class, 'store']);
     Route::post('login', [UserSessionController::class, 'login']);
     Route::post('logout', [UserSessionController::class, 'logout'])
         ->middleware(['auth:sanctum', 'ability:user']);
 });
 
-Route::group(['user_email_verification'],function (){
-    Route::get('email/verify/{id}', [VerificationController::class,'verify'])
+Route::prefix('email')->group(function () {
+    Route::get('verify/{id}', [VerificationController::class, 'verify'])
         ->name('verification.verify');
 
-    Route::get('email/resend', [VerificationController::class,'resend'])
+    Route::get('resend', [VerificationController::class, 'resend'])
         ->name('verification.resend');
 });
 
-Route::group(['unit'],function (){
+Route::prefix('unit')->group(function (){
     Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
-        Route::post('unit/store',[UnitController::class,'store']);
-        Route::delete('unit/{unit}',[UnitController::class,'delete']);
-        Route::put('unit/{unit}',[UnitController::class,'update']);
+        Route::post('store',[UnitController::class,'store']);
+        Route::delete('{unit}',[UnitController::class,'delete']);
+        Route::put('{unit}',[UnitController::class,'update']);
     });
 
-    Route::get('unit/{unit}',[UnitController::class,'read'])
+    Route::get('{unit}',[UnitController::class,'show'])
         ->middleware(['auth:sanctum', 'ability:user,admin']);
-    Route::post('unit/buy/{unit}',[UnitController::class,'buy'])
+    Route::post('buy/{unit}',[UnitController::class,'buy'])
         ->middleware(['auth:sanctum', 'ability:user']);;
 });
 
