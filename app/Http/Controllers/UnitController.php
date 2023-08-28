@@ -85,6 +85,12 @@ class UnitController extends Controller
 
     public function buy(Unit $unit)
     {
+        if($unit->is_sold) {
+            return response()->json([
+                'message' => 'Unit is sold out'
+            ], 403);
+        }
+
         $user = $this->getUserFromToken();
         $transaction = $this->createNewTransaction($unit, $user);
         return response()->json([
