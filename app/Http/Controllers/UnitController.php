@@ -27,7 +27,7 @@ class UnitController extends Controller
         Image::insert($imagesData);
     }
 
-    public function store(UnitRequest $request)
+    public function store(UnitStoreRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -48,7 +48,7 @@ class UnitController extends Controller
         ], 201);
     }
 
-    public function update(UnitRequest $request, Unit $unit)
+    public function update(UnitUpdateRequest $request, Unit $unit)
     {
         try {
             DB::beginTransaction();
@@ -84,6 +84,7 @@ class UnitController extends Controller
             'message' => 'unit deleted successfully'
         ], 200);
     }
+
 
     private function getUserFromToken()
     {
