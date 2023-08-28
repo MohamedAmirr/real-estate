@@ -46,6 +46,7 @@ Route::prefix('email')->group(function () {
         ->name('verification.resend');
 });
 
+
 Route::prefix('unit')->group(function (){
     Route::middleware(['auth:sanctum','ability:admin'])->group(function (){
         Route::post('store',[UnitController::class,'store']);
