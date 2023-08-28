@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminSessionController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserAuth\UserRegisterController;
 use App\Http\Controllers\UserAuth\UserSessionController;
 use App\Http\Controllers\UserAuth\VerificationController;
@@ -32,7 +33,8 @@ Route::prefix('admin')->group(function () {
 Route::prefix('user')->group(function () {
     Route::post('register', [UserRegisterController::class, 'store']);
     Route::post('login', [UserSessionController::class, 'login']);
-    Route::post('logout', [UserSessionController::class, 'logout'])->middleware(['auth:sanctum', 'ability:user']);
+    Route::post('logout', [UserSessionController::class, 'logout'])
+        ->middleware(['auth:sanctum', 'ability:user']);
 });
 
 Route::prefix('email')->group(function () {
@@ -41,5 +43,13 @@ Route::prefix('email')->group(function () {
 
     Route::get('resend', [VerificationController::class, 'resend'])
         ->name('verification.resend');
+});
+
+
+Route::prefix('unit')->middleware(['auth:sanctum','ability:admin'])->group(function (){
+    Route::post('store',[UnitController::class,'store']);
+    Route::get('{unit}',[UnitController::class,'show']);
+    Route::delete('{unit}',[UnitController::class,'delete']);
+    Route::put('{unit}',[UnitController::class,'update']);
 });
 
