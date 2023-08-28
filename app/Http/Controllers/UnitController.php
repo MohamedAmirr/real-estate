@@ -9,6 +9,8 @@ use App\Models\Image;
 use App\Models\Unit;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class UnitController extends Controller
 {
@@ -27,11 +29,17 @@ class UnitController extends Controller
 
     public function store(UnitStoreRequest $request)
     {
-        $unit = Unit::create($request->validated());
+        try {
+            DB::beginTransaction();
+            $unit = Unit::create($request->validated());
 
-        $images = $request->file('images');
-        if ($images) {
-            $this->saveImages($images, $unit);
+            $images = $request->file('images');
+            if ($images) {
+                $this->saveImages($images, $unit);
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollback();
         }
 
         return response()->json([
@@ -42,12 +50,18 @@ class UnitController extends Controller
 
     public function update(UnitUpdateRequest $request, Unit $unit)
     {
-        $unit->update($request->validated());
+        try {
+            DB::beginTransaction();
+            $unit->update($request->validated());
 
-        $images = $request->file('images');
+            $images = $request->file('images');
 
-        if ($images) {
-            $this->saveImages($images, $unit);
+            if ($images) {
+                $this->saveImages($images, $unit);
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollback();
         }
 
         return response()->json([
