@@ -21,6 +21,8 @@ class UnitController extends Controller
             $data = [
                 'path' => $imageFile->store('', ['disk' => 'upload']),
                 'unit_id' => $unit->id,
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
             $imagesData[] = $data;
         }
