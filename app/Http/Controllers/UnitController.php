@@ -101,18 +101,27 @@ class UnitController extends Controller
 
         $user = Auth::user();
 
-        $transaction = $this->createNewTransaction($unit, $user);
+        $price = $this->checkDiscount($unit);
+
+        $transaction = $this->createNewTransaction($unit, $user, $price);
+
         return response()->json([
             'message' => 'Success',
             'body' => new TransactionResource($transaction)
         ], 200);
     }
 
-    private function createNewTransaction(Unit $unit, object $user): Transaction
+    private function checkDiscount(object $unit): int
+    {
+        return (request()->has('price') ? (int)request(['price'][0]) : $unit->price);
+    }
+
+    private function createNewTransaction(Unit $unit, object $user, int $price): Transaction
     {
         return Transaction::create([
             'user_id' => $user->id,
             'unit_id' => $unit->id,
+            'price' => $price
         ]);
     }
 }
