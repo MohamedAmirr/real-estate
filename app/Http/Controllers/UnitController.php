@@ -10,13 +10,14 @@ use App\Models\Image;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 use Throwable;
 
 class UnitController extends Controller
 {
-    private function saveImages($images, Unit $unit)
+    private function saveImages($images, Unit $unit): void
     {
         $imagesData = [];
         foreach ($images as $imageFile) {
@@ -31,7 +32,7 @@ class UnitController extends Controller
         Image::insert($imagesData);
     }
 
-    public function store(UnitStoreRequest $request)
+    public function store(UnitStoreRequest $request): JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -52,7 +53,7 @@ class UnitController extends Controller
         ], 201);
     }
 
-    public function update(UnitUpdateRequest $request, Unit $unit)
+    public function update(UnitUpdateRequest $request, Unit $unit): JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -74,14 +75,14 @@ class UnitController extends Controller
         ], 200);
     }
 
-    public function show(Unit $unit)
+    public function show(Unit $unit): JsonResponse
     {
         return response()->json([
             'unit' => new UnitResource($unit),
         ], 200);
     }
 
-    public function delete(Unit $unit)
+    public function delete(Unit $unit): JsonResponse
     {
         $unit->delete();
         return response()->json([
@@ -90,23 +91,23 @@ class UnitController extends Controller
     }
 
 
-    private function getUserFromToken()
+    private function getUserFromToken(): User
     {
         $token = PersonalAccessToken::findToken(request()->bearerToken());
         return $token->tokenable;
     }
 
-    private function createNewTransaction(Unit $unit, User $user)
+    private function createNewTransaction(Unit $unit, User $user): Transaction
     {
         return Transaction::create([
-            'user_id'=>$user->id,
-            'unit_id'=>$unit->id,
+            'user_id' => $user->id,
+            'unit_id' => $unit->id,
         ]);
     }
 
-    public function buy(Unit $unit)
+    public function buy(Unit $unit): JsonResponse
     {
-        if($unit->is_sold) {
+        if ($unit->is_sold) {
             return response()->json([
                 'message' => 'Unit is sold out'
             ], 403);

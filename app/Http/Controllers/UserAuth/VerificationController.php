@@ -4,11 +4,12 @@ namespace App\Http\Controllers\UserAuth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class VerificationController extends Controller
 {
-    public function verify(Request $request)
+    public function verify(Request $request): JsonResponse
     {
         if (!$request->hasValidSignature()) {
             return response()->json(["message" => "Invalid/Expired url provided."], 401);
@@ -25,7 +26,7 @@ class VerificationController extends Controller
         ]);
     }
 
-    public function resend(Request $request)
+    public function resend(Request $request): JsonResponse
     {
         $user = User::findOrFail($request->id);
         if ($user->hasVerifiedEmail()) {
