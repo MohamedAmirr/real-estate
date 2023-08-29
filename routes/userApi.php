@@ -14,14 +14,6 @@ Route::prefix('user')->group(function () {
         ->middleware(['auth:sanctum', 'ability:user']);
 });
 
-Route::prefix('email')->group(function () {
-    Route::get('verify/{id}', [VerificationController::class, 'verify'])
-        ->name('verification.verify');
-
-    Route::get('resend', [VerificationController::class, 'resend'])
-        ->name('verification.resend');
-});
-
 Route::prefix('unit')->group(function () {
     Route::get('{unit}', [UnitController::class, 'show'])
         ->middleware(['auth:sanctum', 'ability:user']);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserAuth\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,10 @@ Route::name('admin')->group(base_path('routes/adminApi.php'));
 Route::name('user')->group(base_path('routes/userApi.php'));
 
 
+Route::prefix('email')->group(function () {
+    Route::get('email/verify/{id}', [VerificationController::class, 'verify'])
+        ->name('verification.verify');
 
-
-
-
+    Route::get('email/resend', [VerificationController::class, 'resend'])
+        ->name('verification.resend');
+});
