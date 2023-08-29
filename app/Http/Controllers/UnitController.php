@@ -11,12 +11,35 @@ use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 use Throwable;
 
 class UnitController extends Controller
 {
+    public function update(UnitUpdateRequest $request, Unit $unit): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $unit->update($request->validated());
+
+            $images = $request->file('images');
+
+            if ($images) {
+                $this->saveImages($images, $unit);
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollback();
+        }
+
+        return response()->json([
+            'message' => 'Unit updated successfully',
+            'unit' => new UnitResource($unit)
+        ], 200);
+    }
+
     private function saveImages($images, Unit $unit): void
     {
         $imagesData = [];
@@ -53,28 +76,6 @@ class UnitController extends Controller
         ], 201);
     }
 
-    public function update(UnitUpdateRequest $request, Unit $unit): JsonResponse
-    {
-        try {
-            DB::beginTransaction();
-            $unit->update($request->validated());
-
-            $images = $request->file('images');
-
-            if ($images) {
-                $this->saveImages($images, $unit);
-            }
-            DB::commit();
-        } catch (Throwable $e) {
-            DB::rollback();
-        }
-
-        return response()->json([
-            'message' => 'Unit updated successfully',
-            'unit' => new UnitResource($unit)
-        ], 200);
-    }
-
     public function show(Unit $unit): JsonResponse
     {
         return response()->json([
@@ -90,21 +91,6 @@ class UnitController extends Controller
         ], 200);
     }
 
-
-    private function getUserFromToken(): User
-    {
-        $token = PersonalAccessToken::findToken(request()->bearerToken());
-        return $token->tokenable;
-    }
-
-    private function createNewTransaction(Unit $unit, User $user): Transaction
-    {
-        return Transaction::create([
-            'user_id' => $user->id,
-            'unit_id' => $unit->id,
-        ]);
-    }
-
     public function buy(Unit $unit): JsonResponse
     {
         if ($unit->is_sold) {
@@ -113,11 +99,20 @@ class UnitController extends Controller
             ], 403);
         }
 
-        $user = $this->getUserFromToken();
+        $user = Auth::user();
+
         $transaction = $this->createNewTransaction($unit, $user);
         return response()->json([
             'message' => 'Success',
             'body' => new TransactionResource($transaction)
         ], 200);
+    }
+
+    private function createNewTransaction(Unit $unit, object $user): Transaction
+    {
+        return Transaction::create([
+            'user_id' => $user->id,
+            'unit_id' => $unit->id,
+        ]);
     }
 }
