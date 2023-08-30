@@ -103,7 +103,7 @@ class UnitController extends Controller
 
         $price = $unit->price;
 
-        $transaction = $this->createNewTransaction($unit, $user, $price);
+        $transaction = $this->createNewTransaction($unit->id, $user->id, $price);
 
         return response()->json([
             'message' => 'Success',
@@ -111,11 +111,11 @@ class UnitController extends Controller
         ], 200);
     }
 
-    private function createNewTransaction(Unit $unit, object $user, int $price): Transaction
+    private function createNewTransaction(int $unit, int $user, int $price): Transaction
     {
         return Transaction::create([
-            'user_id' => $user->id,
-            'unit_id' => $unit->id,
+            'user_id' => $user,
+            'unit_id' => $unit,
             'price' => $price
         ]);
     }
