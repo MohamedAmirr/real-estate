@@ -12,11 +12,13 @@ Route::prefix('user')->group(function () {
     Route::post('login', [UserSessionController::class, 'login']);
     Route::post('logout', [UserSessionController::class, 'logout'])
         ->middleware(['auth:sanctum', 'ability:user']);
+
+    Route::prefix('unit')->group(function () {
+        Route::get('{unit}', [UnitController::class, 'show'])
+            ->middleware(['auth:sanctum', 'ability:user']);
+        Route::post('buy/{unit}', [UnitController::class, 'buy'])
+            ->middleware(['auth:sanctum', 'ability:user']);
+    });
 });
 
-Route::prefix('unit')->group(function () {
-    Route::get('{unit}', [UnitController::class, 'show'])
-        ->middleware(['auth:sanctum', 'ability:user']);
-    Route::post('buy/{unit}', [UnitController::class, 'buy'])
-        ->middleware(['auth:sanctum', 'ability:user']);
-});
+
