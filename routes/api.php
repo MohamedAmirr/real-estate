@@ -20,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::name('admin')->group(base_path('routes/admin_api.php'));
-Route::name('user')->group(base_path('routes/user_api.php'));
+//Route::name('admin')->group(base_path('routes/admin_api.php'));
+//Route::name('user')->group(base_path('routes/user_api.php'));
 
 
 Route::prefix('email')->group(function () {

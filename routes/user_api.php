@@ -7,7 +7,7 @@ use App\Http\Controllers\UserAuth\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('user')->group(function () {
+Route::group([], function () {
     Route::post('register', [UserRegisterController::class, 'store']);
     Route::post('login', [UserSessionController::class, 'login']);
     Route::post('logout', [UserSessionController::class, 'logout'])
@@ -16,9 +16,8 @@ Route::prefix('user')->group(function () {
     Route::prefix('unit')->group(function () {
         Route::get('{unit}', [UnitController::class, 'show'])
             ->middleware(['auth:sanctum', 'ability:user']);
-        Route::post('buy/{unit}', [UnitController::class, 'buy'])
+        Route::post('buy/{id}', [UnitController::class, 'buy'])
             ->middleware(['auth:sanctum', 'ability:user']);
     });
 });
-
 
