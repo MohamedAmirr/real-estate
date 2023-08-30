@@ -101,7 +101,7 @@ class UnitController extends Controller
 
         $user = Auth::user();
 
-        $price = $this->checkDiscount($unit);
+        $price = $unit->price;
 
         $transaction = $this->createNewTransaction($unit, $user, $price);
 
@@ -109,11 +109,6 @@ class UnitController extends Controller
             'message' => 'Success',
             'body' => new TransactionResource($transaction)
         ], 200);
-    }
-
-    private function checkDiscount(object $unit): int
-    {
-        return (request()->has('price') ? (int)request(['price'][0]) : $unit->price);
     }
 
     private function createNewTransaction(Unit $unit, object $user, int $price): Transaction
