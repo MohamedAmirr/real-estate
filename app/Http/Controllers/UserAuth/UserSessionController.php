@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSessionController extends Controller
 {
-    private function checkPassword($password): bool
+    private function checkPassword(string $password): bool
     {
         return Hash::check(request()->password, $password);
     }
-    public function login(UserLoginRequest $request){
+    public function login(UserLoginRequest $request): JsonResponse
+    {
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !$this->checkPassword($user->password)) {
