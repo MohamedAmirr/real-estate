@@ -26,10 +26,12 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function listPurchases(User $user){
+    public function listPurchases(Request $request)
+    {
+        $user = User::findOrFail($request->id);
         return response()->json([
-            'message'=>'success',
-            'body'=> new UserTransactionResource($user),
+            'message' => 'success',
+            'body' => new UserTransactionResource($user),
         ]);
     }
 }
