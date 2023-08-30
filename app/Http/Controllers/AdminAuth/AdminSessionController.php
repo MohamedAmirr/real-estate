@@ -6,15 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminSessionController extends Controller
 {
-
-    private function checkPassword($password): bool
-    {
-        return Hash::check(request()->password, $password);
-    }
 
     public function login(AdminLoginRequest $request)
     {
@@ -30,6 +26,11 @@ class AdminSessionController extends Controller
             'message' => 'Success',
             'token' => $admin->createToken($admin, ['admin'])
         ], 200);
+    }
+
+    private function checkPassword($password): bool
+    {
+        return Hash::check(request()->password, $password);
     }
 
     public function logout(): JsonResponse

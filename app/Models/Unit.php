@@ -8,11 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Unit extends Model
 {
     use HasFactory;
-    protected $guarded=[];
+    protected $guarded = [];
 
 
     public function images(){
         return $this->hasMany(Image::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasOne(Transaction::class);
+    }
+
+    public function getIsSoldAttribute()
+    {
+        return $this->transactions?->where('unit_id', $this->id)->exists();
+    }
 }

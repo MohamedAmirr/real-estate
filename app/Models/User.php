@@ -22,6 +22,9 @@ class User extends Authenticatable implements MustVerifyEmail
          */
     protected $guarded = [];
 
+    public function transactions(){
+        return $this->hasMany(Transaction::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
