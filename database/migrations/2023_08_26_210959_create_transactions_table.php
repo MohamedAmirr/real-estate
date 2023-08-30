@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained(table: 'users');
             $table->foreignId('unit_id')->constrained(table: 'units');
-            $table->integer('price');
+            $table->double('price');
             $table->timestamps();
         });
     }
