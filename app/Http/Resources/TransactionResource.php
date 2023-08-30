@@ -15,13 +15,12 @@ class TransactionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $unitInfo = UnitResource::collection($this->getUnits($this->unit_id));
         return [
             'transaction_id' => $this->id,
             'user_id' => $this->user_id,
-            //TODO
-            'UnitDetails' => UnitResource::collection($this->getUnits($this->unit_id)),
-            'unit_id' => $this->unit_id,
             'price' => $this->price,
+            'unit_details' => $unitInfo->except(['price']),
         ];
     }
 
