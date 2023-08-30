@@ -8,11 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TransactionResource extends JsonResource
 {
-    private function getUnits($id)
-    {
-        return (Unit::where('id', $id)->get());
-    }
-
     /**
      * Transform the resource into an array.
      *
@@ -21,8 +16,17 @@ class TransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'TransactionID' => $this->id,
+            'transaction_id' => $this->id,
+            'user_id' => $this->user_id,
+            //TODO
             'UnitDetails' => UnitResource::collection($this->getUnits($this->unit_id)),
+            'unit_id' => $this->unit_id,
+            'price' => $this->price,
         ];
+    }
+
+    private function getUnits($id)
+    {
+        return (Unit::where('id', $id)->get());
     }
 }
