@@ -102,7 +102,6 @@ class UnitController extends Controller
 
     public function delete(Request $request): JsonResponse
     {
-        //TODO: if unit is sold, this function will return error
         $unit = Unit::findOrFail($request->id);
         $unit->delete();
         return response()->json([
