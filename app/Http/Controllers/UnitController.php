@@ -114,11 +114,7 @@ class UnitController extends Controller
             ], 403);
         }
 
-        $user = Auth::user();
-
-        $price = $unit->price;
-
-        $transaction = $this->createNewTransaction($unit->id, $user->id, $price);
+        $transaction = $this->createNewTransaction($unit->id, Auth::user()->id, $unit->price);
 
         return response()->json([
             'message' => 'Success',
@@ -126,11 +122,11 @@ class UnitController extends Controller
         ], 200);
     }
 
-    private function createNewTransaction(int $unit, int $user, int $price): Transaction
+    private function createNewTransaction(int $unitId, int $userId, int $price): Transaction
     {
         return Transaction::create([
-            'user_id' => $user,
-            'unit_id' => $unit,
+            'user_id' => $userId,
+            'unit_id' => $unitId,
             'price' => $price
         ]);
     }
