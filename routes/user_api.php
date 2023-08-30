@@ -19,5 +19,8 @@ Route::group([], function () {
         Route::post('buy/{id}', [UnitController::class, 'buy'])
             ->middleware(['auth:sanctum', 'ability:user']);
     });
+
+    Route::get('units', [UnitController::class, 'filter'])
+        ->middleware(['auth:sanctum', 'ability:user']);
 });
 
