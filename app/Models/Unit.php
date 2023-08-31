@@ -26,13 +26,14 @@ class Unit extends Model
         return $this->hasOne(Transaction::class);
     }
 
-    public function getIsSoldAttribute()
+    public function getIsSoldAttribute(): bool
     {
         return $this->transactions?->where('unit_id', $this->id)->exists();
     }
 
     public function scopeFilter($query, array $filters): void
     {
+
         $query->when($filters['type'] ?? false, function ($query, $type) {
             $query->where('type', $type);
         });

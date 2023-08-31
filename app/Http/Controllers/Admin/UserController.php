@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\TransactionResource;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\UserTransactionResource;
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -26,13 +24,5 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User has been deleted successfully'
         ], 200);
-    }
-
-    public function listPurchases(User $user): JsonResponse
-    {
-        return response()->json([
-            'message' => 'success',
-            'body' => TransactionResource::collection($user->transactions()->get()),
-        ]);
     }
 }

@@ -18,6 +18,13 @@ class Transaction extends Model
 
     public function Unit()
     {
-        $this->belongsTo(Unit::class);
+        return $this->belongsTo(Unit::class);
+    }
+
+    public function scopeFilter($query, array $filters): void
+    {
+        $query->when($filters['user_id'] ?? false, function ($query, $user_id) {
+            $query->where('user_id', $user_id);
+        });
     }
 }

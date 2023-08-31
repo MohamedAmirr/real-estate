@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\UnitController;
+use App\Http\Controllers\User\TransactionController;
+use App\Http\Controllers\User\UnitController;
 use App\Http\Controllers\UserAuth\UserRegisterController;
 use App\Http\Controllers\UserAuth\UserSessionController;
 use App\Http\Controllers\UserAuth\VerificationController;
@@ -22,5 +23,10 @@ Route::group([], function () {
 
     Route::get('units', [UnitController::class, 'filter'])
         ->middleware(['auth:sanctum', 'ability:user']);
+    Route::get('purchases', [TransactionController::class, 'listPurchases'])
+        ->middleware(['auth:sanctum', 'ability:user']);
+    Route::get('purchased', [TransactionController::class, 'filterUserUnits'])
+        ->middleware(['auth:sanctum', 'ability:user']);
+
 });
 

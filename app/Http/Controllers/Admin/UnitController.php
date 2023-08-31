@@ -1,22 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UnitStoreRequest;
 use App\Http\Requests\UnitUpdateRequest;
-use App\Http\Resources\FilterUnitCollection;
-use App\Http\Resources\FilterUnitResource;
-use App\Http\Resources\TransactionResource;
 use App\Http\Resources\UnitResource;
 use App\Models\Image;
-use App\Models\Transaction;
 use App\Models\Unit;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\FilterService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Laravel\Sanctum\PersonalAccessToken;
 use Throwable;
 
 class UnitController extends Controller
@@ -79,18 +74,6 @@ class UnitController extends Controller
         ], 201);
     }
 
-    public function filter(Request $request): JsonResponse
-    {
-        return response()->json([
-            'message' => 'success',
-            'body' => new FilterUnitCollection(
-                Unit::latest()->filter(
-                    request(['type', 'location', 'number_of_rooms', 'number_of_bathrooms', 'area'])
-                )->paginate()
-            )
-        ], 200);
-    }
-
     public function show(Unit $unit): JsonResponse
     {
         return response()->json([
@@ -106,32 +89,11 @@ class UnitController extends Controller
         ], 200);
     }
 
-    public function buy(Unit $unit): JsonResponse
+    public function filter(Request $request): JsonResponse
     {
-        if ($unit->is_sold) {
-            return response()->json([
-                'message' => 'Unit is sold out'
-            ], 403);
-        }
-
-        $user = Auth::user();
-
-        $price = $unit->price;
-
-        $transaction = $this->createNewTransaction($unit->id, $user->id, $price);
-
-        return response()->json([
-            'message' => 'Success',
-            'body' => new TransactionResource($transaction)
-        ], 200);
+        $filterService = new FilterService();
+        return $filterService->filter($this->getFiltrationAttributes($request));
     }
 
-    private function createNewTransaction(int $unitId, int $userId, int $price): Transaction
-    {
-        return Transaction::create([
-            'user_id' => $userId,
-            'unit_id' => $unitId,
-            'price' => $price
-        ]);
-    }
+
 }

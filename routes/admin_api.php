@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminAuth\AdminSessionController;
-use App\Http\Controllers\UnitController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,7 +24,7 @@ Route::group([], function () {
         Route::delete('user/{user}', [UserController::class, 'destroy']);
     });
 
-    Route::get('purchases/{user}', [UserController::class, 'listPurchases'])
+    Route::get('purchases/{user}', [TransactionController::class, 'listPurchases'])
         ->middleware(['auth:sanctum', 'ability:admin']);
 
     Route::get('units', [UnitController::class, 'filter'])
