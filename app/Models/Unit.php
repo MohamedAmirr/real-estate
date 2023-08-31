@@ -26,7 +26,7 @@ class Unit extends Model
         return $this->hasOne(Transaction::class);
     }
 
-    public function getIsSoldAttribute(): bool
+    public function getIsSoldAttribute()
     {
         return $this->transactions?->where('unit_id', $this->id)->exists();
     }
