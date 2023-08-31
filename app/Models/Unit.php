@@ -21,7 +21,7 @@ class Unit extends Model
         return $this->hasMany(Image::class);
     }
 
-    public function transactions(): HasOne
+    public function transaction(): HasOne
     {
         return $this->hasOne(Transaction::class);
     }
