@@ -79,7 +79,7 @@ class UnitController extends Controller
         ], 201);
     }
 
-    public function filter(Request $request)
+    public function filter(Request $request): JsonResponse
     {
         return response()->json([
             'message' => 'success',

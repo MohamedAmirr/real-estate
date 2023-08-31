@@ -46,7 +46,7 @@ class Unit extends Model
             $query->where('number_of_bathrooms', $number_of_bathrooms);
         });
         $query->when($filters['area'] ?? false, function ($query, $area) {
-            $query->where('number_of_bathrooms', $area);
+            $query->where('area', $area);
         });
 
     }
