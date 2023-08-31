@@ -16,9 +16,9 @@ class UserTransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user_id'=>$this->id,
-            'name'=>$this->name,
-            'units'=>TransactionResource::collection($this->transactions)
+            'user_id' => $this->id,
+            'name' => $this->name,
+            'transactions' => TransactionResource::collection($this->transactions)
         ];
     }
 }

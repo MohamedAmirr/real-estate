@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TransactionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserTransactionResource;
 use App\Models\User;
@@ -31,7 +32,7 @@ class UserController extends Controller
     {
         return response()->json([
             'message' => 'success',
-            'body' => new UserTransactionResource($user),
+            'body' => TransactionResource::collection($user->transactions()->get()),
         ]);
     }
 }
