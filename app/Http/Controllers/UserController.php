@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserTransactionResource;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,8 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function listPurchases(Request $request)
+    public function listPurchases(User $user): JsonResponse
     {
-        $user = User::findOrFail($request->id);
         return response()->json([
             'message' => 'success',
             'body' => new UserTransactionResource($user),

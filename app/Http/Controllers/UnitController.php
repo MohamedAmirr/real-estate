@@ -21,9 +21,8 @@ use Throwable;
 
 class UnitController extends Controller
 {
-    public function update(UnitUpdateRequest $request): JsonResponse
+    public function update(UnitUpdateRequest $request, Unit $unit): JsonResponse
     {
-        $unit = Unit::findOrFail($request->id);
         try {
             DB::beginTransaction();
             $unit->update($request->validated());
@@ -92,26 +91,23 @@ class UnitController extends Controller
         ], 200);
     }
 
-    public function show(Request $request): JsonResponse
+    public function show(Unit $unit): JsonResponse
     {
-        $unit = Unit::findOrFail($request->id);
         return response()->json([
             'unit' => new UnitResource($unit),
         ], 200);
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(Unit $unit): JsonResponse
     {
-        $unit = Unit::findOrFail($request->id);
         $unit->delete();
         return response()->json([
             'message' => 'unit deleted successfully'
         ], 200);
     }
 
-    public function buy(Request $request): JsonResponse
+    public function buy(Unit $unit): JsonResponse
     {
-        $unit = Unit::findOrFail($request->id);
         if ($unit->is_sold) {
             return response()->json([
                 'message' => 'Unit is sold out'

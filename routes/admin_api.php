@@ -13,9 +13,9 @@ Route::group([], function () {
 
     Route::prefix('unit')->middleware(['auth:sanctum', 'ability:admin'])->group(function () {
         Route::post('store', [UnitController::class, 'store']);
-        Route::get('{id}', [UnitController::class, 'show']);
-        Route::delete('{id}', [UnitController::class, 'delete']);
-        Route::put('{id}', [UnitController::class, 'update']);
+        Route::get('{unit}', [UnitController::class, 'show']);
+        Route::delete('{unit}', [UnitController::class, 'delete']);
+        Route::put('{unit}', [UnitController::class, 'update']);
     });
 
     Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
@@ -23,7 +23,7 @@ Route::group([], function () {
         Route::delete('user/{user}', [UserController::class, 'destroy']);
     });
 
-    Route::get('purchases/{id}', [UserController::class, 'listPurchases'])
+    Route::get('purchases/{user}', [UserController::class, 'listPurchases'])
         ->middleware(['auth:sanctum', 'ability:admin']);
 
     Route::get('units', [UnitController::class, 'filter'])

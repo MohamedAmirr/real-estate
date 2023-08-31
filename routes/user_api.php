@@ -16,7 +16,7 @@ Route::group([], function () {
     Route::prefix('unit')->group(function () {
         Route::get('{unit}', [UnitController::class, 'show'])
             ->middleware(['auth:sanctum', 'ability:user']);
-        Route::post('buy/{id}', [UnitController::class, 'buy'])
+        Route::post('buy/{unit}', [UnitController::class, 'buy'])
             ->middleware(['auth:sanctum', 'ability:user']);
     });
 
