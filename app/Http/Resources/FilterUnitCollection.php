@@ -18,7 +18,7 @@ class FilterUnitCollection extends ResourceCollection
             'total' => $this->resource->total(),
             'current_page' => $this->resource->currentPage(),
             'perPage' => $this->resource->perPage(),
-            'data' => $this->collection,
+            'data' => UnitResource::collection($this->collection),
         ];
     }
 }

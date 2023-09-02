@@ -27,8 +27,8 @@ Route::group([], function () {
     Route::get('purchases/{user}', [TransactionController::class, 'listPurchases'])
         ->middleware(['auth:sanctum', 'ability:admin']);
 
-    Route::get('units', [UnitController::class, 'filter']) // TODO: return resource
-    ->middleware(['auth:sanctum', 'ability:admin']);
+    Route::get('units', [UnitController::class, 'filter'])
+        ->middleware(['auth:sanctum', 'ability:admin']);
 });
 
 
