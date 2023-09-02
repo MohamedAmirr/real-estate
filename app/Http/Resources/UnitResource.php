@@ -15,17 +15,9 @@ class UnitResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $data = collect($this->resource->toArray())->put('images', ImageResource::collection($this->resource->images));
         return [
-            'id' => $this->resource->id,
-            'name' => $this->resource->name,
-            'price' => $this->resource->price,
-            'description' => $this->resource->description,
-            'type' => $this->resource->type,
-            'location' => $this->resource->location,
-            'area' => $this->resource->area,
-            'num_of_rooms' => $this->resource->num_of_rooms,
-            'num_of_bathrooms' => $this->resource->num_of_bathrooms,
-            'images' => ImageResource::collection($this->resource->images),
+            $data->except(['created_at', 'updated_at', 'deleted_at']),
         ];
     }
 }
