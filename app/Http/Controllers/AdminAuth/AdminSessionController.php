@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class AdminSessionController extends Controller
 {
 
-    public function login(AdminLoginRequest $request)
+    public function login(AdminLoginRequest $request): JsonResponse
     {
         $admin = Admin::where('email', $request->email)->first();
 
@@ -28,14 +28,15 @@ class AdminSessionController extends Controller
         ], 200);
     }
 
-    private function checkPassword($password): bool
+    private function checkPassword(string $password): bool
     {
         return Hash::check(request()->password, $password);
     }
 
     public function logout(): JsonResponse
     {
-        request()->user()->currentAccessToken()->delete();
+        $token = Auth::user()->currentAccessToken();
+        $token->delete();
 
         return response()->json([
             'message' => 'You are logged out'
