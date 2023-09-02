@@ -23,7 +23,6 @@ class UnitController extends Controller
             $unit->update($request->validated());
 
             $images = $request->file('images');
-
             if ($images) {
                 $this->saveImages($images, $unit);
             }
@@ -38,7 +37,7 @@ class UnitController extends Controller
         ], 200);
     }
 
-    private function saveImages($images, Unit $unit): void
+    private function saveImages(array $images, Unit $unit): void
     {
         $imagesData = [];
         foreach ($images as $imageFile) {
@@ -55,14 +54,17 @@ class UnitController extends Controller
 
     public function store(UnitStoreRequest $request): JsonResponse
     {
+        $unit = null;
         try {
             DB::beginTransaction();
             $unit = Unit::create($request->validated());
 
             $images = $request->file('images');
+
             if ($images) {
                 $this->saveImages($images, $unit);
             }
+
             DB::commit();
         } catch (Throwable $e) {
             DB::rollback();
