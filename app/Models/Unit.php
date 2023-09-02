@@ -28,7 +28,7 @@ class Unit extends Model
 
     public function getIsSoldAttribute()
     {
-        return $this->transactions?->where('unit_id', $this->id)->exists();
+        return $this->transaction?->where('unit_id', $this->id)->exists();
     }
 
     public function scopeFilter($query, array $filters): void

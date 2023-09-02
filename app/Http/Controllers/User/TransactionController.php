@@ -28,9 +28,8 @@ class TransactionController extends Controller
     {
         $attributes = $this->getFiltrationAttributes($request);
 
-        $units = Unit::whereHas('transaction', function ($q) {
-            $q->where('user_id', Auth::user()->id);
-        })->filter($attributes)->paginate();
+        $units = Unit::whereHas('transaction', fn($q) => $q->where('user_id', Auth::user()->id))
+            ->filter($attributes)->paginate();
 
         return response()->json([
             'message' => 'success',
