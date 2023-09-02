@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Hash;
 
 class Controller extends BaseController
 {
@@ -21,5 +22,10 @@ class Controller extends BaseController
             'number_of_bathrooms' => $request->number_of_bathrooms,
             'area' => $request->area,
         ];
+    }
+
+    protected function checkPassword(string $password): bool
+    {
+        return Hash::check(request()->password, $password);
     }
 }

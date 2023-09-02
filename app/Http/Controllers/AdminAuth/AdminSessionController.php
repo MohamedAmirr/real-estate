@@ -28,11 +28,6 @@ class AdminSessionController extends Controller
         ], 200);
     }
 
-    private function checkPassword(string $password): bool
-    {
-        return Hash::check(request()->password, $password);
-    }
-
     public function logout(): JsonResponse
     {
         $token = Auth::user()->currentAccessToken();
